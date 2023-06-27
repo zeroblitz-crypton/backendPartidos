@@ -1,58 +1,50 @@
 require("./conection")
 const express=require("express")
-const fichaAlumnoSchema=require("./models/fichaAlumno")
+const celularSchema=require("./models/celulares")
 const cors=require("cors")
 const app = express()
+app.use(function(req,res,next){
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Headers','Content-Type');
+    
+    next();
+})
 app.use(express.json())
 app.use(cors())
 
-app.post("/registroAlumno", async(req,res)=>{
-    const fichaAlumno= new fichaAlumnoSchema({
-        apellidos:req.body.apellidos,
-        nombres:req.body.nombres,
-        sexo:req.body.sexo,
-        fechaNacimiento:req.body.fechaNacimiento,
-        edad:req.body.edad,
-        estadoCivil:req.body.estadoCivil,
-        documentoIdentidad:req.body.documentoIdentidad,
-        gradoInstruccion:req.body.gradoInstruccion,
-        tipoEstudio:req.body.tipoEstudio,
-        institucionProcedencia:req.body.institucionProcedencia,
-        lugarInstitucionProcedencia:req.body.lugarInstitucionProcedencia,
-        direccionRecidencia:req.body.direccionRecidencia,
-        distritoRecidencia:req.body.distritoRecidencia,
-        departamentoNacimiento:req.body.departamentoNacimiento,
-        provinciaNacimiento:req.body.provinciaNacimiento,
-        distritoNacimiento:req.body.distritoNacimiento,
-        lugarNacimiento:req.body.lugarNacimiento,
-        telefonoReferencia:req.body.telefonoReferencia,
-        celular:req.body.celular,
-        correo:req.body.correo,
-        //datos academicos
-        ciclo:req.body.ciclo,
-        especialidad:req.body.especialidad,
-        modulo:req.body.modulo,
-        turno:req.body.turno,
-        horario:req.body.horario,
-        duracion:req.body.duracion
+
+
+app.post("/registroCelular", async(req,res)=>{
+    const celular= new celularSchema({
+        nombreCelular:req.body.nombreCelular,
+        camaraPosterior:req.body.camaraPosterior,  
+        camaraFrontal:req.body.camaraFrontal,
+        sizePantalla:req.body.sizePantalla,
+        sizeRam:req.body.sizeRam,
+        sizeStorage:req.body.sizeStorage,
+        sizeBatery:req.body.sizeBatery,
+        nombreProcesador:req.body.nombreProcesador,
+        imagen:req.body.imagen
+
     })
-    await fichaAlumno.save()
-    res.json(fichaAlumno)
+    await celular.save()
+    res.json(celular)
 })
 
-app.get("/registroAlumno",async(req,res)=>{
-    const fichaAlumno= await fichaAlumnoSchema.find()
-    res.json(fichaAlumno)
+app.get("/registroCelular",async(req,res)=>{
+    const celular= await celularSchema.find()
+    res.json(celular)
 })
 
-app.delete("/registroAlumno/:id",async(req,res)=>{
-    const partido = await fichaAlumnoSchema.findOneAndRemove({_id: req.params.id})
-    res.json({msg : "se elimino partido con exito"})
+app.delete("/registroCelular/:id",async(req,res)=>{
+    const celular = await celularSchema.findOneAndRemove({_id: req.params.id})
+    res.json({msg : "se elimino el registro con exito"})
 })
 
-app.get("/registroAlumno/:id",async(req,res)=>{
-    const fichaAlumno = await fichaAlumnoSchema.findById({_id:req.params.id})
-    res.json(fichaAlumno)
+app.get("/registroCelular/:id",async(req,res)=>{
+    const celular = await celularSchema.findById({_id:req.params.id})
+    res.json(celular)
 })
 
 app.listen(3000,()=>{
